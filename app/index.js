@@ -1,6 +1,7 @@
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const logger = require('./utils/logger');
 
@@ -16,6 +17,7 @@ const server = http.createServer(application);
 websocket.init(server);
 
 application.use(logger);
+application.use(cors());
 application.use(bodyParser.urlencoded({ extended: true }));
 application.use(bodyParser.json());
 application.use('/rooms', roomRouter(roomStorage));
