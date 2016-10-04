@@ -3,9 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const logger = require('./utils/logger');
-const roomRouter = require('./routers/room');
 
 const websocket = require('./websocket');
+
+const roomRouter = require('./routers/room');
+
+const roomStorage = require('./models/rooms');
 
 const application = express();
 const server = http.createServer(application);
@@ -13,8 +16,9 @@ const server = http.createServer(application);
 websocket.init(server);
 
 application.use(logger);
+application.use(bodyParser.urlencoded({ extended: true }));
 application.use(bodyParser.json());
-application.use('/room', roomRouter);
+application.use('/rooms', roomRouter(roomStorage));
 
 const applicationPort = process.env.PORT || 3000;
 
