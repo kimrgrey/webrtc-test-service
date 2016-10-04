@@ -12,19 +12,19 @@ const createRouter = (roomStorage) => {
     response.json(roomStorage);
   })
   .post((request, response, next) => {
-    const room_name = (request.body.room_name || request.query.room_name);
-    const room_id = generateRoomId();
+    const name = (request.body.name || request.query.name);
+    const id = generateRoomId();
 
-    const room = { room_id, room_name };
+    const room = { id, name };
 
     roomStorage.push(room);
     response.json(room);
   });
 
-  router.route('/:room_id')
+  router.route('/:id')
   .get((request, response, next) => {
-    const { room_id } = request.params;
-    const room = lodash.find(roomStorage, (r) => (r.room_id === room_id));
+    const { id } = request.params;
+    const room = lodash.find(roomStorage, (r) => (r.id === id));
 
     if (!!room) {
       response.json(room);
@@ -34,13 +34,13 @@ const createRouter = (roomStorage) => {
     }
   })
   .put((request, response, next) => {
-    const { room_id } = request.params;
-    const room_name = (request.body.room_name || request.query.room_name);
+    const { id } = request.params;
+    const name = (request.body.name || request.query.name);
 
-    const room = lodash.find(roomStorage, (r) => (r.room_id === room_id));
+    const room = lodash.find(roomStorage, (r) => (r.id === id));
 
     if (!!room) {
-      room.room_name = room_name;
+      room.name = name;
       response.json(room);
     }
     else {
@@ -48,9 +48,9 @@ const createRouter = (roomStorage) => {
     }
   })
   .delete((request, response, next) => {
-    const { room_id } = request.params;
+    const { id } = request.params;
 
-    const rooms = lodash.remove(roomStorage, (r) => (r.room_id === room_id));
+    const rooms = lodash.remove(roomStorage, (r) => (r.id === id));
 
     if (rooms.length) {
       response.json(rooms[0]);
