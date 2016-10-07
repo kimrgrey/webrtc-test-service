@@ -1,7 +1,7 @@
 {
-  "name": "call-n-go-service",
+  "name": "webrtc-test-service",
   "version": "1.0.0",
-  "description": "Call-n-Go Service",
+  "description": "Test service for group video-chats",
   "main": "app/index.js",
   "scripts": {
     "start": "node app/index.js"
