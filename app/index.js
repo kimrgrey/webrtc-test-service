@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const logger = require('./utils/logger');
 
-const websocket = require('./websocket');
+const signalling = require('./signalling');
 
 const roomRouter = require('./routers/room');
 
@@ -14,7 +14,7 @@ const roomStorage = require('./models/rooms');
 const application = express();
 const server = http.createServer(application);
 
-websocket.init(server);
+signalling.init(server);
 
 application.use(logger);
 application.use(cors());
