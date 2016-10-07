@@ -43,11 +43,14 @@ const onClientJoin = (client, params) => {
       client.leave(client.room);
   }
 
+  const members = Object.keys(clients)
+    .filter((k) => (clients[k].room === id));
+
   client.room = id;
   client.join(client.room);
 
   __broadcast(client, 'joined', { id: client.id });
-  __emit(client, 'members', { ids: Object.keys(clients) });
+  __emit(client, 'members', members);
 };
 
 const onClientLeave = (client, params) => {
