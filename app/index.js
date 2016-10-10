@@ -22,8 +22,13 @@ application.use(bodyParser.urlencoded({ extended: true }));
 application.use(bodyParser.json());
 application.use('/rooms', roomRouter(roomStorage));
 
-const applicationPort = process.env.PORT || 3000;
+const applicationHost = process.env.WEBRTC_HOST ||
+                        process.env.HOST ||
+                        'localhost';
+const applicationPort = process.env.WEBRTC_PORT ||
+                        process.env.PORT ||
+                        3000;
 
-server.listen(applicationPort, () => {
-  console.log('started on', applicationPort);
+server.listen(applicationPort, applicationHost, () => {
+  console.log('started on', applicationHost + ':' + applicationPort);
 });
