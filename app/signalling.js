@@ -39,7 +39,6 @@ const onIoConnection = (client) => {
 };
 
 const onClientRegister = (client, params) => {
-  console.log('register from', client.id);
   __emit(client, 'registered', JSON.stringify({ id: client.id }));
 };
 
@@ -51,20 +50,21 @@ const onClientJoin = (client, params) => {
       client.leave(client.room);
   }
 
-  const members = Object.keys(clients)
-    .filter((k) => (clients[k].room === id));
+  var members = {};
+
+  Object.keys(clients)
+    .filter((k) => (clients[k].room === id))
+    .forEach((k)=> { members[k] = { id: k } });
 
   client.room = id;
-  client.join(client.room, (err) => {
-    console.log('join from', client.id, err);
 
+  client.join(client.room, (err) => {
     __broadcast(client, 'joined', JSON.stringify({ id: client.id }));
     __emit(client, 'members', JSON.stringify(members));
   });
 };
 
 const onClientLeave = (client, params) => {
-  console.log('leave from', client.id);
   if (client.room !== undefined) {
     __broadcast(client, 'left', JSON.stringify({ id: client.id }));
     client.leave(client.room);
@@ -76,7 +76,7 @@ const onClientLeave = (client, params) => {
 const onClientWebRTC = (client, params) => {
   const { receiver } = JSON.parse(params);
 
-  if (receiver !== undefined && client[receiver] !== undefined) {
+  if (receiver !== undefined && clients[receiver] !== undefined) {
     __emit(clients[receiver], 'webrtc', params);
   }
   else {
