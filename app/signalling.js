@@ -34,6 +34,7 @@ const onIoConnection = (client) => {
   client.on('join',          (params) => onClientJoin(client, params));
   client.on('leave',         (params) => onClientLeave(client, params));
   client.on('webrtc',        (params) => onClientWebRTC(client, params));
+  client.on('message',       (params) => onClientMessage(client, params));
   client.on('disconnecting', (params) => onClientDisconnecting(client, params));
   client.on('disconnect',    (params) => onClientDisconnect(client, params));
 };
@@ -81,6 +82,17 @@ const onClientWebRTC = (client, params) => {
   }
   else {
     __broadcast(client, 'webrtc', params);
+  }
+};
+
+const onClientMessage = (client, params) => {
+  const { receiver } = JSON.parse(params);
+
+  if (receiver !== undefined && clients[receiver] !== undefined) {
+    __emit(clients[receiver], 'message', params);
+  }
+  else {
+    __broadcast(client, 'message', params);
   }
 };
 
