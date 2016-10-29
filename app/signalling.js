@@ -35,6 +35,8 @@ const onIoConnection = (client) => {
   client.on('leave',         (params) => onClientLeave(client, params));
   client.on('webrtc',        (params) => onClientWebRTC(client, params));
   client.on('message',       (params) => onClientMessage(client, params));
+  client.on('toggle-audio',  (params) => onClientToggleAudio(client, params));
+  client.on('toggle-video',  (params) => onClientToggleVideo(client, params));
   client.on('disconnecting', (params) => onClientDisconnecting(client, params));
   client.on('disconnect',    (params) => onClientDisconnect(client, params));
 };
@@ -93,6 +95,28 @@ const onClientMessage = (client, params) => {
   }
   else {
     __broadcast(client, 'message', params);
+  }
+};
+
+const onClientToggleAudio = (client, params) => {
+  const { receiver } = JSON.parse(params);
+
+  if (receiver !== undefined && clients[receiver] !== undefined) {
+    __emit(clients[receiver], 'toggle-audio', params);
+  }
+  else {
+    __broadcast(client, 'toggle-audio', params);
+  }
+};
+
+const onClientToggleVideo = (client, params) => {
+  const { receiver } = JSON.parse(params);
+
+  if (receiver !== undefined && clients[receiver] !== undefined) {
+    __emit(clients[receiver], 'toggle-video', params);
+  }
+  else {
+    __broadcast(client, 'toggle-video', params);
   }
 };
 
