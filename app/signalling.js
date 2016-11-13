@@ -42,6 +42,15 @@ const onIoConnection = (client) => {
 };
 
 const onClientRegister = (client, params) => {
+  const { id } = JSON.parse(params);
+
+  if (id) {
+    delete clients[client.id];
+
+    client.id = id;
+    clients[client.id] = client;
+  }
+
   __emit(client, 'registered', JSON.stringify({ id: client.id }));
 };
 
