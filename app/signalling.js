@@ -45,6 +45,11 @@ const onClientRegister = (client, params) => {
   const { id } = JSON.parse(params);
 
   if (id) {
+    if (id in clients) {
+      __emit(client, 'register-failed');
+      return;
+    }
+
     delete clients[client.id];
 
     client.id = id;
